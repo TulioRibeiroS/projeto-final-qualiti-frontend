@@ -29,7 +29,7 @@ const TableComponent = ({ actions, columns = [], items = [], refetch }) => {
               );
             })}
             {actions && (
-              <td>
+              <td key={`${index}+1`}>
                 <Dropdown>
                   <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                     Actions
