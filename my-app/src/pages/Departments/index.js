@@ -7,7 +7,7 @@ import ListView from "../../components/ListView";
 import Modal from "../../components/Modal";
 import api from "../../services/axios";
 
-const endpoint = "/courses";
+const endpoint = "/departments";
 
 const columns = [
   {
@@ -22,18 +22,18 @@ const columns = [
 
 const INITIAL_STATE = { id: 0, name: "" };
 
-const Courses = () => {
+const Departments = () => {
   const [visible, setVisible] = useState(false);
-  const [course, setCourse] = useState({ INITIAL_STATE });
+  const [departments, setDepartments] = useState({ INITIAL_STATE });
 
   const handleSave = async (refetch) => {
     try {
-      if (course.id) {
-        await api.put(`${endpoint}/${course.id}`, { name: course.name });
+      if (departments.id) {
+        await api.put(`${endpoint}/${departments.id}`, { name: departments.name });
 
-        toast.success("Successfully updated!");
+        toast.success("Successfully update!");
       } else {
-        await api.post(endpoint, { name: course.name });
+        await api.post(endpoint, { name: departments.name });
 
         toast.success("Successfully created!");
       }
@@ -50,19 +50,19 @@ const Courses = () => {
   const actions = [
     {
       name: "Edit",
-      action: (_course) => {
-        setCourse(_course);
+      action: (_departments) => {
+        setDepartments(_departments);
         setVisible(true);
       },
     },
     {
       name: "Remove",
-      action: async (course, refetch) => {
+      action: async (departments, refetch) => {
         if (window.confirm("Are you sure about that?")) {
           try {
-            await api.delete(`${endpoint}/${course.id}`);
+            await api.delete(`${endpoint}/${departments.id}`);
             await refetch();
-            toast.info(`Curso ${course.name} was removed`);
+            toast.info(`Departments ${departments.name} was removed`);
           } catch (error) {
             toast.info(error.message);
           }
@@ -72,34 +72,34 @@ const Courses = () => {
   ];
 
   return (
-    <Page title="Courses">
+    <Page title="Departments">
       <Button
         className="mb-2"
         onClick={() => {
-          setCourse(INITIAL_STATE);
+          setDepartments(INITIAL_STATE);
           setVisible(true);
         }}
       >
-        Create Course
+        Create Departments
       </Button>
 
       <ListView actions={actions} columns={columns} endpoint={endpoint}>
         {({ refetch }) => (
           <Modal
-            title={`${course.id ? "Update" : "Create"} Course`}
+            title={`${departments.id ? "Update" : "Create"} Departments`}
             show={visible}
             handleSave={() => handleSave(refetch)}
             handleClose={() => handleClose()}
           >
             <Form>
               <Form.Group>
-                <Form.Label>Course Name</Form.Label>
+                <Form.Label>Departments Name</Form.Label>
                 <Form.Control
-                  name="course"
+                  name="Departments"
                   onChange={(event) =>
-                    setCourse({ ...course, name: event.target.value })
+                    setDepartments({ ...departments, name: event.target.value })
                   }
-                  value={course.name}
+                  value={departments.name}
                 />
               </Form.Group>
             </Form>
@@ -110,4 +110,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default Departments;
