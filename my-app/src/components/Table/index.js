@@ -38,6 +38,7 @@ const TableComponent = ({ actions, columns = [], items = [], refetch }) => {
                   <Dropdown.Menu>
                     {actions.map((action) => (
                       <Dropdown.Item
+                        key={`actions-option-${index}`}
                         onClick={() => action.action(item, refetch)}
                       >
                         {action.name}

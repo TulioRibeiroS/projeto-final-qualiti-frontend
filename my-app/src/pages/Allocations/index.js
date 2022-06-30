@@ -27,12 +27,19 @@ const columns = [
     id: "startHour",
   },
   {
+    value: "Professor",
+    id: "professor",
+    render: (professor) => professor.name,
+  },
+  {
     value: "Department",
-    id: "departmentId",
+    id: "professor",
+    render: (professor) => professor?.department?.name,
   },
   {
     value: "Course",
-    id: "courseId",
+    id: "course",
+    render: (course) => course?.name,
   },
 ];
 
@@ -41,15 +48,28 @@ const INITIAL_STATE = {
   dayOfWeek: "",
   endHour: "",
   startHour: "",
-  department: 0,
-  course: 0,
+  professor: "",
+  department: "",
+  course: "",
 };
 
 const Allocations = () => {
   const [visible, setVisible] = useState(false);
   const [allocation, setAllocation] = useState({ INITIAL_STATE });
+  const [professors, setProfessors] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    api
+      .get("/professors")
+      .then((response) => {
+        setProfessors(response.data);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  }, []);
 
   useEffect(() => {
     api
@@ -78,6 +98,7 @@ const Allocations = () => {
       dayOfWeek: allocation.dayOfWeek,
       endHour: allocation.endHour,
       startHour: allocation.startHour,
+      professorId: allocation.professorId,
       departmentId: allocation.departmentId,
       courseId: allocation.courseId,
     };
@@ -110,6 +131,7 @@ const Allocations = () => {
         dayOfWeek,
         endHour,
         startHour,
+        professor: { id: professorId },
         department: { id: departmentId },
         course: { id: courseId },
       }) => {
@@ -118,6 +140,7 @@ const Allocations = () => {
           dayOfWeek,
           endHour,
           startHour,
+          professor: { id: professorId },
           department: { id: departmentId },
           course: { id: courseId },
         });
@@ -187,6 +210,22 @@ const Allocations = () => {
                   onChange={onChange}
                   value={allocation.endHour}
                 />
+                <Form.Label>Professor</Form.Label>
+                <select
+                  className="form-control"
+                  name="professorId"
+                  onChange={onChange}
+                  value={allocation.professorId}
+                >
+                  <option>Select one professor</option>
+                  {professors.map((item, index) => {
+                    return (
+                      <option key={index} value={item.id}>
+                        {item.name}
+                      </option>
+                    );
+                  })}
+                </select>
                 <Form.Label>Department</Form.Label>
                 <select
                   className="form-control"

@@ -24,9 +24,9 @@ const columns = [
   },
   {
     value: "Department",
-    id: "departmentId",
-    // render: (departments) => departments.name,
-  },
+    id: "department",
+    render: (department) => department.name,
+},
 ];
 
 const INITIAL_STATE = { id: 0, name: "", cpf: "", department: 0 };
